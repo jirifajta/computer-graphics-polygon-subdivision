@@ -49,6 +49,14 @@ public class KeyboardController extends KeyAdapter {
             case KeyEvent.VK_NUMPAD4:
                 this.frameDraw.getGlobalVariables().ndiv_queued = 4;
                 break;
+            case KeyEvent.VK_PAGE_UP:
+                this.frameDraw.getGlobalVariables().ndiv_queued++;
+                this.frameDraw.getGlobalVariables().ndiv_queued = this.frameDraw.getGlobalVariables().ndiv_queued > 512 ? 512 : this.frameDraw.getGlobalVariables().ndiv_queued;
+                break;
+             case KeyEvent.VK_PAGE_DOWN:
+                this.frameDraw.getGlobalVariables().ndiv_queued--;
+                this.frameDraw.getGlobalVariables().ndiv_queued = this.frameDraw.getGlobalVariables().ndiv_queued < 0 ? 0 : this.frameDraw.getGlobalVariables().ndiv_queued;
+                break;
             case KeyEvent.VK_MINUS:
             case KeyEvent.VK_SUBTRACT:
                 this.frameDraw.getControlInterface().setDeltaSpeed(10);//slower

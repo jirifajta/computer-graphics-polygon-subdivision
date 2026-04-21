@@ -125,6 +125,7 @@ public class SubdivisionDemoMod implements ControlInterface, AddPolygonInterface
         if (divpoly.ndiv > divpoly.rvs.length) {
             System.out.println("WARNING: divpoly.ndiv " + divpoly.ndiv + " > divpoly.rv.length " + divpoly.rvs.length + ". So, change to max supported ndiv = " + divpoly.rvs.length);
             divpoly.ndiv = divpoly.rvs.length;
+            this.globalVariables.ndiv = divpoly.ndiv;
         }
         
         //ORIGINAL TRIANGLE:

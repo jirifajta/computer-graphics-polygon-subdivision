@@ -229,7 +229,9 @@ public class FrameDraw extends JPanel {
         int screen_text_step = screen_text_offset;
         if (this.globalVariables.showHudMode < 2) {
             g.setColor(color_string);
-            g.drawString("Key numeric 0-4:", 20, screen_text_step);
+            g.drawString("Key numeric 0-4 or", 20, screen_text_step);
+            screen_text_step += screen_text_delta;
+            g.drawString("Key page up/down", 20, screen_text_step);
             int division = (1 << this.globalVariables.ndiv);
             g.drawString("subdevision level: " + this.globalVariables.ndiv + " (queued level: " + this.globalVariables.ndiv_queued + ")", 200, screen_text_step);
             screen_text_step += screen_text_delta;
