@@ -1,0 +1,32 @@
+# Polygon subdivision
+
+A program to demonstrate a recursive polygon subdivision algorithm as an interactive simulation and library. It features stop searching conditions for subdivisions if it is out of bounding box. Supports division up to 16x16. With a very small modification, it is possible to divide even much more. The aim of this limitation is to use fixed memory that can be used in the future in C code.<br/>
+[Introduction to Recursion at GeeksforGeeks](https://www.geeksforgeeks.org/dsa/introduction-to-recursion-2/)  provides a simple concept of recursive algorithm to learn the basics.<br/>
+
+Polygon subdivision in 3D graphics is used to divide a large polygon into smaller polygons to filter what polygons are in view space. This ensures that only the visible polygons are drawn by GPU's rasterizer. Note that clipping is done in screen space not in clip space (frustum clipping).
+
+![Recursive 16x16 subdivision algorithm live](images/Simulation_2.gif)<br/>
+_Recursive 16x16 subdivision algorithm live._<br/>
+
+![Interactive simulation 16x16 subdivision live](images/Simulation_4.gif)<br/>
+_Interactive simulation 16x16 subdivision live._<br/>
+
+![Full 8x8 subdivision live](images/Simulation_full_8x8.gif)<br/>
+_Full 8x8 subdivision live._<br/>
+<br/>
+# Code
+Source code and application are available.
+Actual source code for Java library can be found in folder _org.Subdivision_.<br/>
+The program has two main functions.
+
+* Practical usage how to call function:
+src\org\Subdivision\MainPracticalDemo.java
+  - It contains clean code to apply.
+* Modified version to simulate on display:
+src\org\SubdivisionSimulation\MainSubdivisionSimulation.java
+  - Is modified in such a way to update display at every little update during calculation.
+<br/>
+There is an easter egg hidden in the code!<br/><br/>
+
+**Author:** MSc Jiří Fajta<br/>
+**Code implementation date:** 2026<br/>
