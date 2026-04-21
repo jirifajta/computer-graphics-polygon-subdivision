@@ -32,7 +32,7 @@ src\org\Subdivision\MainPracticalDemo.java
 * Modified version to simulate on display:
 src\org\SubdivisionSimulation\MainSubdivisionSimulation.java
   - Is modified in such a way to update display at every little update during calculation.
-<br/>
+
 There is an easter egg hidden in the code!<br/><br/>
 
 **Author:** MSc Jiří Fajta<br/>
