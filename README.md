@@ -7,21 +7,19 @@ Polygon subdivision in 3D graphics is used to divide a large polygon into smalle
 
 <div align="center" width="100% style="margin-bottom:0;">
     <img src="images/Simulation_2.gif">
+	<p><i>Recursive 16x16 subdivision algorithm live.</i></p>
 </div>
-
-_Recursive 16x16 subdivision algorithm live._<br/>
-
+<br/>
 <div align="center" width="100% style="margin-bottom:0;">
     <img src="images/Simulation_4.gif">
+	<p><i>Interactive simulation 16x16 subdivision live.</i></p>
 </div>
-
-_Interactive simulation 16x16 subdivision live._<br/>
-
+<br/>
 <div align="center" width="100% style="margin-bottom:0;">
     <img src="images/Simulation_full_8x8.gif">
+	<p><i>Full 8x8 subdivision live.</i></p>
 </div>
-
-_Full 8x8 subdivision live._<br/>
+<br/>
 <br/>
 # Code
 Source code and application are available for Java.
