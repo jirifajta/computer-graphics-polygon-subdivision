@@ -27,14 +27,14 @@ Polygon subdivision in 3D graphics is used to divide a large polygon into smalle
 
 # Code
 Source code and application are available for Java.
-Actual source code for Java library can be found in folder [org.Subdivision](src\org\Subdivision).<br/>
+Actual source code for Java library can be found in folder [org.Subdivision](src/org/Subdivision).<br/>
 The program has two main functions.
 
 * Practical usage how to call function:
-[MainPracticalDemo.java](src\org\Subdivision\MainPracticalDemo.java)
+[MainPracticalDemo.java](src/org/Subdivision/MainPracticalDemo.java)
   - It contains clean code to apply.
 * Modified version to simulate on display:
-[MainSubdivisionSimulation.java](src\org\SubdivisionSimulation\MainSubdivisionSimulation.java)
+[MainSubdivisionSimulation.java](src/org/SubdivisionSimulation/MainSubdivisionSimulation.java)
   - Is modified in such a way to update display at every little update during calculation just for this simulation.
 
 There is an easter egg hidden in the code!<br/><br/>
