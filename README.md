@@ -5,20 +5,20 @@ A program to demonstrate a recursive polygon subdivision algorithm as an interac
 
 Polygon subdivision in 3D graphics is used to divide a large polygon into smaller polygons to filter what polygons are in view space. This ensures that only the visible polygons are drawn by GPU's rasterizer. Note that clipping is done in screen space not in clip space (frustum clipping).
 
-<div align="center" style="margin-bottom:0;">
-    <img width="100%" src="images/Simulation_2.gif" style="max-width: none">
+<div align="center" width="100% style="margin-bottom:0;">
+    <img src="images/Simulation_2.gif">
 </div>
 
 _Recursive 16x16 subdivision algorithm live._<br/>
 
-<div align="center" style="margin-bottom:0;">
-    <img width="100%" src="images/Simulation_4.gif" style="max-width: none">
+<div align="center" width="100% style="margin-bottom:0;">
+    <img src="images/Simulation_4.gif">
 </div>
 
 _Interactive simulation 16x16 subdivision live._<br/>
 
-<div align="center" style="margin-bottom:0;">
-    <img width="100%" src="images/Simulation_full_8x8.gif" style="max-width: none">
+<div align="center" width="100% style="margin-bottom:0;">
+    <img src="images/Simulation_full_8x8.gif">
 </div>
 
 _Full 8x8 subdivision live._<br/>
