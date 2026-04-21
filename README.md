@@ -20,7 +20,7 @@ Polygon subdivision in 3D graphics is used to divide a large polygon into smalle
 	<p><i>Full 8x8 subdivision live.</i></p>
 </div>
 <br/>
-<br/>
+
 # Code
 Source code and application are available for Java.
 Actual source code for Java library can be found in folder _org.Subdivision_.<br/>
