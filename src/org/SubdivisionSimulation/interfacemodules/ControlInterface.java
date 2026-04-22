@@ -5,7 +5,7 @@
  *
  */
 
-package org.SubdivisionSimulation.Interface;
+package org.subdivisionsimulation.interfacemodules;
 
 public interface ControlInterface {
     //void setNdiv(int ndiv);

@@ -5,9 +5,9 @@
  *
  */
 
-package org.Subdivision;
+package org.subdivision;
 
-import org.Subdivision.Interface.AddPolygonInterface;
+import org.subdivision.interfacemodules.AddPolygonInterface;
 
 /*
  *
@@ -73,6 +73,65 @@ public class Subdivision{
 
         divpoly.r0.sz = divpoly.r1.sz = divpoly.r2.sz = 5;
     }
+    
+    public void initializeRootPolygon(SUBDIVPOLYGON4_16 divpoly) {
+        int scale_polygons = 10;// scale triangles to draw visable on screen later.
+        int offset_x_polygons = 0;
+        int offset_y_polygons = 0;
+
+        //preset:
+        divpoly.ndiv = 4;
+        divpoly.clipx=0;
+        divpoly.clipy=0;
+        divpoly.cliph = 1920;
+        divpoly.clipv = 1080;
+
+        // start triangle as input. 
+        divpoly.r0.v.x = -100;
+        divpoly.r0.v.y = -100;
+        divpoly.r0.v.z = 0;
+
+        divpoly.r1.v.x = 100;
+        divpoly.r1.v.y = -100;
+        divpoly.r1.v.z = 0;
+
+        divpoly.r2.v.x = 100;
+        divpoly.r2.v.y = 100;
+        divpoly.r2.v.z = 0;
+        
+        divpoly.r3.v.x = -100;
+        divpoly.r3.v.y = 100;
+        divpoly.r3.v.z = 0;
+
+        offset_x_polygons = 500;
+        offset_y_polygons = 500;
+
+        divpoly.r0.sxy.x = offset_x_polygons - 25 * scale_polygons;
+        divpoly.r0.sxy.y = offset_y_polygons - 25 * scale_polygons;
+
+        divpoly.r1.sxy.x = offset_x_polygons + 25 * scale_polygons;
+        divpoly.r1.sxy.y = offset_y_polygons - 25 * scale_polygons;
+
+        divpoly.r2.sxy.x = offset_x_polygons + 25 * scale_polygons;
+        divpoly.r2.sxy.y = offset_y_polygons + 25 * scale_polygons;
+
+        divpoly.r3.sxy.x = offset_x_polygons + -25 * scale_polygons;
+        divpoly.r3.sxy.y = offset_y_polygons + 25 * scale_polygons;
+        
+        divpoly.r0.c.r = 255;
+        divpoly.r0.c.g = divpoly.r0.c.b = 0;
+
+        divpoly.r1.c.g = 255;
+        divpoly.r1.c.r = divpoly.r1.c.b = 0;
+
+        divpoly.r2.c.b = 255;
+        divpoly.r2.c.r = divpoly.r2.c.g = 0;
+
+        divpoly.r3.c.b = 255;
+        divpoly.r3.c.r = divpoly.r3.c.g = 0;
+        
+        divpoly.r0.sz = divpoly.r1.sz = divpoly.r2.sz = divpoly.r3.sz = 5;
+    }
 
     public void start(SUBDIVPOLYGON3_16 divpoly) {
         
@@ -135,6 +194,49 @@ public class Subdivision{
         }//end if (divpoly.ndiv > 0)
     }
 
+    
+    public void start(SUBDIVPOLYGON4_16 divpoly) {
+        
+        if(addPolygonInterface == null){
+             throw new IllegalArgumentException("Subdivision: variable addPolygonInterface cannot be null");
+        }
+        
+        if (!clipTest(divpoly, divpoly.r0.sxy, divpoly.r1.sxy, divpoly.r2.sxy, divpoly.r3.sxy)) {
+            return;
+        }
+
+        //ROOT
+        //System.out.println("\nROOT: " + divpoly.getString());
+
+        if (divpoly.ndiv > divpoly.rvs.length) {
+            System.out.println("WARNING: divpoly.ndiv " + divpoly.ndiv + " > divpoly.rv.length " + divpoly.rvs.length + ". So, change to max supported ndiv = " + divpoly.rvs.length);
+            divpoly.ndiv = divpoly.rvs.length;
+        }
+        
+        //START DIVISION
+        if (divpoly.ndiv > 0) {
+            int level = 0;
+            divpoly.rvs[level].level = level;
+
+            divpoly.rvs[level].r01 = calculateMidpoints(divpoly.r0, divpoly.r1);//01
+            divpoly.rvs[level].r12 = calculateMidpoints(divpoly.r1, divpoly.r2);//12
+            divpoly.rvs[level].r23 = calculateMidpoints(divpoly.r2, divpoly.r3);//23
+            divpoly.rvs[level].r30 = calculateMidpoints(divpoly.r3, divpoly.r0);//30
+            divpoly.rvs[level].r0123 = calculateMidpoints(divpoly.rvs[level].r01, divpoly.rvs[level].r23);// cneter of quad.
+
+            
+            calculateMidpoints4_continue(divpoly, level, divpoly.r0, divpoly.rvs[level].r01, divpoly.rvs[level].r0123, divpoly.rvs[level].r30);
+
+            calculateMidpoints4_continue(divpoly, level, divpoly.r1, divpoly.rvs[level].r12, divpoly.rvs[level].r0123, divpoly.rvs[level].r01);
+
+            calculateMidpoints4_continue(divpoly, level, divpoly.r2, divpoly.rvs[level].r23, divpoly.rvs[level].r0123, divpoly.rvs[level].r12);
+
+            calculateMidpoints4_continue(divpoly, level, divpoly.r3, divpoly.rvs[level].r30, divpoly.rvs[level].r0123, divpoly.rvs[level].r23);
+
+        } else {
+            addPolygonInterface.addPolygon(divpoly.r0, divpoly.r1, divpoly.r2, divpoly.r3);
+        }//end if (divpoly.ndiv > 0)
+    }
     // recursive funcion
     // div = [1-4]
     // level = 0;//[0-3]
@@ -142,7 +244,7 @@ public class Subdivision{
         int level_plus_one = level + 1;
         
         // checks the root first.
-        if (!clip_not_out_of_bount(divpoly, level)) {
+        if (!clip_not_out_of_bound(divpoly, level)) {
            return;
         }
 
@@ -158,7 +260,7 @@ public class Subdivision{
 //            divpoly.rvs[level_plus_one].r0_ptr = divpoly.rvs[level_plus_one].r01;//copy pointer sub_root
 //            divpoly.rvs[level_plus_one].r1_ptr = divpoly.rvs[level_plus_one].r12;//copy pointer
 //            divpoly.rvs[level_plus_one].r2_ptr = divpoly.rvs[level_plus_one].r20;//copy pointer
-//            if (clip_not_out_of_bount(divpoly, level_plus_one)) {
+//            if (clip_not_out_of_bound(divpoly, level_plus_one)) {
 //                //calculateMidpoints3(mid01, mid12, mid20, level_plus_one);  //MIDDEL
 //                calculateMidpoints3(divpoly, level_plus_one);
 //            }
@@ -169,7 +271,7 @@ public class Subdivision{
 //            divpoly.rvs[level_plus_one].r0_ptr = divpoly.rvs[level].r0_ptr;//copy pointer sub_root
 //            divpoly.rvs[level_plus_one].r1_ptr = divpoly.rvs[level_plus_one].r01;//copy pointer
 //            divpoly.rvs[level_plus_one].r2_ptr = divpoly.rvs[level_plus_one].r20;//copy pointer
-//            if (clip_not_out_of_bount(divpoly, level_plus_one)) {
+//            if (clip_not_out_of_bound(divpoly, level_plus_one)) {
 //                //calculateMidpoints3(v_root0, mid01, mid20, level_plus_one);//LEFT
 //                calculateMidpoints3(divpoly, level_plus_one);
 //            }
@@ -178,7 +280,7 @@ public class Subdivision{
 //            divpoly.rvs[level_plus_one].r0_ptr = divpoly.rvs[level].r1_ptr;//copy pointer sub_root
 //            divpoly.rvs[level_plus_one].r1_ptr = divpoly.rvs[level_plus_one].r12;//copy pointer
 //            divpoly.rvs[level_plus_one].r2_ptr = divpoly.rvs[level_plus_one].r01;//copy pointer
-//            if (clip_not_out_of_bount(divpoly, level_plus_one)) {
+//            if (clip_not_out_of_bound(divpoly, level_plus_one)) {
 //                //calculateMidpoints3(v_root`, md12, mid01, level_plus_one);//RIGHT
 //                calculateMidpoints3(divpoly, level_plus_one);
 //            }
@@ -187,7 +289,7 @@ public class Subdivision{
 //            divpoly.rvs[level_plus_one].r0_ptr = divpoly.rvs[level].r2_ptr;//copy pointer sub_root
 //            divpoly.rvs[level_plus_one].r1_ptr = divpoly.rvs[level_plus_one].r20;//copy pointer
 //            divpoly.rvs[level_plus_one].r2_ptr = divpoly.rvs[level_plus_one].r12;//copy pointer
-//            if (clip_not_out_of_bount(divpoly, level_plus_one)) {
+//            if (clip_not_out_of_bound(divpoly, level_plus_one)) {
 //                //calculateMidpoints3(v_root2, mid20, mid12, level_plus_one);//DOWN
 //                calculateMidpoints3(divpoly, level_plus_one);
 //            }
@@ -198,13 +300,56 @@ public class Subdivision{
         }//end if (level_plus_one < divpoly.ndiv)
     }
     
+// recursive funcion
+    private void calculateMidpoints4(SUBDIVPOLYGON4_16 divpoly, int level) {
+        int level_plus_one = level + 1;
+        
+        // checks the root first.
+        if (!Subdivision.this.clip_not_out_of_bound(divpoly, level)) {
+           return;
+        }
+
+        // NEXT LEVEL = processing PREVIOUS LEVEL
+        if (level_plus_one < divpoly.ndiv) {
+            // BRANCH
+            divpoly.rvs[level_plus_one].r01 = calculateMidpoints(divpoly.rvs[level].r0_ptr, divpoly.rvs[level].r1_ptr);
+            divpoly.rvs[level_plus_one].r12 = calculateMidpoints(divpoly.rvs[level].r1_ptr, divpoly.rvs[level].r2_ptr);
+            divpoly.rvs[level_plus_one].r23 = calculateMidpoints(divpoly.rvs[level].r2_ptr, divpoly.rvs[level].r3_ptr);
+            divpoly.rvs[level_plus_one].r30 = calculateMidpoints(divpoly.rvs[level].r3_ptr, divpoly.rvs[level].r0_ptr);
+            divpoly.rvs[level_plus_one].r0123 = calculateMidpoints(divpoly.rvs[level_plus_one].r01, divpoly.rvs[level_plus_one].r23);//center.
+            divpoly.rvs[level_plus_one].level = level;// level of the midpoints.
+
+            //// next subdevision ////
+            calculateMidpoints4_continue(divpoly, level_plus_one, divpoly.rvs[level].r0_ptr, divpoly.rvs[level_plus_one].r01, divpoly.rvs[level_plus_one].r0123, divpoly.rvs[level_plus_one].r30);
+
+            calculateMidpoints4_continue(divpoly, level_plus_one, divpoly.rvs[level].r1_ptr, divpoly.rvs[level_plus_one].r12, divpoly.rvs[level_plus_one].r0123, divpoly.rvs[level_plus_one].r01);
+
+            calculateMidpoints4_continue(divpoly, level_plus_one,  divpoly.rvs[level].r2_ptr, divpoly.rvs[level_plus_one].r23, divpoly.rvs[level_plus_one].r0123, divpoly.rvs[level_plus_one].r12);
+
+            calculateMidpoints4_continue(divpoly, level_plus_one, divpoly.rvs[level].r3_ptr, divpoly.rvs[level_plus_one].r30, divpoly.rvs[level_plus_one].r0123, divpoly.rvs[level_plus_one].r23);
+        } else {
+            // LEAF
+            addPolygonInterface.addPolygon(divpoly.rvs[level].r0_ptr, divpoly.rvs[level].r1_ptr, divpoly.rvs[level].r2_ptr, divpoly.rvs[level].r3_ptr);
+        }//end if (level_plus_one < divpoly.ndiv)
+    }
+    
     // call: calculateMidpoints3_continue(divpoly.rvs[level], divpoly.rvs[level].r2_ptr, divpoly.rvs[level].r20, divpoly.rvs[level].r12);
     private void calculateMidpoints3_continue(SUBDIVPOLYGON3_16 divpoly, int level, RVECTOR r0, RVECTOR r1, RVECTOR r2) {
         divpoly.rvs[level].r0_ptr = r0;//copy pointer sub_root
         divpoly.rvs[level].r1_ptr = r1;//copy pointer
         divpoly.rvs[level].r2_ptr = r2;//copy pointer
-        if (clip_not_out_of_bount(divpoly, level)) {// returns true if visible in space.
+        if (clip_not_out_of_bound(divpoly, level)) {// returns true if visible in space.
             calculateMidpoints3(divpoly, level);
+        }
+    }
+    
+    private void calculateMidpoints4_continue(SUBDIVPOLYGON4_16 divpoly, int level, RVECTOR r0, RVECTOR r1, RVECTOR r2, RVECTOR r3) {
+        divpoly.rvs[level].r0_ptr = r0;//copy pointer sub_root
+        divpoly.rvs[level].r1_ptr = r1;//copy pointer
+        divpoly.rvs[level].r2_ptr = r2;//copy pointer
+        divpoly.rvs[level].r3_ptr = r3;//copy pointer
+        if (clip_not_out_of_bound(divpoly, level)) {// returns true if visible in space.
+            calculateMidpoints4(divpoly, level);
         }
     }
 
@@ -229,9 +374,12 @@ public class Subdivision{
 
         return mid_out;
     }
-
-    private boolean clip_not_out_of_bount(SUBDIVPOLYGON3_16 divpoly, int level) {
+    
+    private boolean clip_not_out_of_bound(SUBDIVPOLYGON3_16 divpoly, int level) {
         return clipTest(divpoly, divpoly.rvs[level].r0_ptr.sxy, divpoly.rvs[level].r1_ptr.sxy, divpoly.rvs[level].r2_ptr.sxy);
+    }
+    private boolean clip_not_out_of_bound(SUBDIVPOLYGON4_16 divpoly, int level) {
+        return clipTest(divpoly, divpoly.rvs[level].r0_ptr.sxy, divpoly.rvs[level].r1_ptr.sxy, divpoly.rvs[level].r2_ptr.sxy, divpoly.rvs[level].r3_ptr.sxy);
     }
     
     //// SCREEN SPACE, is polygon entirely out of screen.
@@ -246,6 +394,28 @@ public class Subdivision{
 
         minY = Math.min(v0.y, Math.min(v1.y, v2.y));
         maxY = Math.max(v0.y, Math.max(v1.y, v2.y));
+
+        // outside screen?
+        if (maxX < divpoly.clipx || minX > divpoly.clipx + divpoly.cliph) {
+            return false;
+        }
+        if (maxY < divpoly.clipy || minY > divpoly.clipy + divpoly.clipv) {
+            return false;
+        }
+        return true; // potentially visible
+    }
+    
+    private boolean clipTest(SUBDIVPOLYGON4_16 divpoly, VECTOR2 v0, VECTOR2 v1, VECTOR2 v2, VECTOR2 v3) {
+        if(!divpoly.isScreenSpaceClipping()){
+            return true;
+        }
+        long minX, maxX, minY, maxY;
+
+        minX = Math.min(v0.x, Math.min(v1.x, Math.min(v2.x, v3.x)));
+        maxX = Math.max(v0.x, Math.max(v1.x, Math.max(v2.x, v3.x)));
+
+        minY = Math.min(v0.y, Math.min(v1.y, Math.min(v2.y, v3.y)));
+        maxY = Math.max(v0.y, Math.max(v1.y, Math.max(v2.y, v3.y)));
 
         // outside screen?
         if (maxX < divpoly.clipx || minX > divpoly.clipx + divpoly.cliph) {

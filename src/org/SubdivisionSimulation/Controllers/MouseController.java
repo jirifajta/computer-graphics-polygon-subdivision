@@ -5,11 +5,11 @@
  *
  */
 
-package org.SubdivisionSimulation.Controllers;
+package org.subdivisionsimulation.controllers;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import org.SubdivisionSimulation.Gui.FrameDraw;
+import org.subdivisionsimulation.gui.FrameDraw;
 
 public class MouseController extends MouseMotionAdapter {
 

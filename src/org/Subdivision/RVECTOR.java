@@ -5,7 +5,7 @@
  *
  */
 
-package org.Subdivision;
+package org.subdivision;
 
 // recursive vertices.
 // recursive element that holds data of any vertex attributes.

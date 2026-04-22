@@ -5,11 +5,11 @@
  *
  */
 
-package org.SubdivisionSimulation.Gui;
+package org.subdivisionsimulation.gui;
 
-import org.SubdivisionSimulation.Controllers.WindowController;
-import org.SubdivisionSimulation.Controllers.MouseController;
-import org.SubdivisionSimulation.Controllers.KeyboardController;
+import org.subdivisionsimulation.controllers.WindowController;
+import org.subdivisionsimulation.controllers.MouseController;
+import org.subdivisionsimulation.controllers.KeyboardController;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -19,12 +19,14 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import org.SubdivisionSimulation.GlobalVariables;
-import org.Subdivision.RVECTOR3;
-import org.Subdivision.SUBDIVPOLYGON3_16;
-import org.SubdivisionSimulation.MouseStatus;
-import org.SubdivisionSimulation.PolygonFX;
-import org.SubdivisionSimulation.Interface.ControlInterface;
+import org.subdivisionsimulation.GlobalVariables;
+import org.subdivision.RVECTOR3;
+import org.subdivision.RVECTOR4;
+import org.subdivision.SUBDIVPOLYGON3_16;
+import org.subdivision.SUBDIVPOLYGON4_16;
+import org.subdivisionsimulation.components.MouseStatus;
+import org.subdivisionsimulation.components.PolygonFX;
+import org.subdivisionsimulation.interfacemodules.ControlInterface;
 
 public class FrameDraw extends JPanel {
     
@@ -196,8 +198,15 @@ public class FrameDraw extends JPanel {
     }
 
     private void drawPolygonFXs(Graphics g, Graphics2D g2) {
+        if(polygonFXs == null){
+            return;
+        }
+            
         for (int poly_i = 0; poly_i < polygonFXs.size(); poly_i++) {
-            if (polygonFXs.get(poly_i).npoints == 3) {
+            if(polygonFXs.get(poly_i) == null) {
+                continue;
+            }
+            if (polygonFXs.get(poly_i).npoints != 1) {
                 if (polygonFXs.get(poly_i).getColor()[0].getRGB() == Color.gray.getRGB()) {
                     // This is a debug function, to show which triangle is active to subdivide.
                     // This line is thinner be shore that the final triangle line overlaps this gray lin.
@@ -205,12 +214,23 @@ public class FrameDraw extends JPanel {
                 } else {
                     g2.setStroke(new BasicStroke(3)); // thickness = 3 pixels
                 }
-                g.setColor(new Color(
-                        (polygonFXs.get(poly_i).getColor()[0].getRed() + polygonFXs.get(poly_i).getColor()[1].getRed() + polygonFXs.get(poly_i).getColor()[2].getRed()) / 3,
-                        (polygonFXs.get(poly_i).getColor()[0].getGreen() + polygonFXs.get(poly_i).getColor()[1].getGreen() + polygonFXs.get(poly_i).getColor()[2].getGreen()) / 3,
-                        (polygonFXs.get(poly_i).getColor()[0].getBlue() + polygonFXs.get(poly_i).getColor()[1].getBlue() + polygonFXs.get(poly_i).getColor()[2].getBlue()) / 3,
-                        (polygonFXs.get(poly_i).getColor()[0].getAlpha()+ polygonFXs.get(poly_i).getColor()[1].getAlpha() + polygonFXs.get(poly_i).getColor()[2].getAlpha()) / 3
-                ));
+                
+                // calculate average color of all vertecies of a polygon.
+                int re = 0;
+                int gr = 0;
+                int bl = 0;
+                int al = 0;
+                for (int vertex_i = 0; vertex_i < polygonFXs.get(poly_i).npoints; vertex_i++) {
+                    re += polygonFXs.get(poly_i).getColor()[vertex_i].getRed();
+                    gr += polygonFXs.get(poly_i).getColor()[vertex_i].getGreen();
+                    bl += polygonFXs.get(poly_i).getColor()[vertex_i].getBlue();
+                    al += polygonFXs.get(poly_i).getColor()[vertex_i].getAlpha();
+                }//end for
+                re /= polygonFXs.get(poly_i).npoints;
+                gr /= polygonFXs.get(poly_i).npoints;
+                bl /= polygonFXs.get(poly_i).npoints;
+                al /= polygonFXs.get(poly_i).npoints;
+                g.setColor(new Color(re,gr,bl,al));
             } else {
                 g.setColor(polygonFXs.get(poly_i).getColor()[0]);
             }
@@ -227,7 +247,7 @@ public class FrameDraw extends JPanel {
 
     private void drawHud(Graphics g) {
         int screen_text_step = screen_text_offset;
-        if (this.globalVariables.showHudMode < 2) {
+        if (this.globalVariables.showHudToggle.getCurrentIndex() < 2) {
             g.setColor(color_string);
             g.drawString("Key numeric 0-4 or", 20, screen_text_step);
             screen_text_step += screen_text_delta;
@@ -238,8 +258,11 @@ public class FrameDraw extends JPanel {
             g.drawString("Key - / +:", 20, screen_text_step);
             g.drawString("slow / fast pause: " + this.globalVariables.pauze_between_frames + " ms", 200, screen_text_step);
             screen_text_step += screen_text_delta;
+            g.drawString("Key S:", 20, screen_text_step);
+            g.drawString("Shape: " + this.globalVariables.shapeToggle.getCurrentLable(), 200, screen_text_step);
+            screen_text_step += screen_text_delta;
             g.drawString("Key H:", 20, screen_text_step);
-            g.drawString("toggle HUD mode: " + this.globalVariables.showHudMode, 200, screen_text_step);
+            g.drawString("toggle HUD mode: " + this.globalVariables.showHudToggle.getCurrentLable(), 200, screen_text_step);
             screen_text_step += screen_text_delta;
             g.drawString("Mouse clip space:", 20, screen_text_step);
             g.drawString("" + mouseStatus.pos_x + " , " + mouseStatus.pos_y, 200, screen_text_step);
@@ -250,7 +273,7 @@ public class FrameDraw extends JPanel {
             g.drawString("Polygon count:", 20, screen_text_step);
             g.drawString(this.globalVariables.number_of_polygons_calculated + " / " + (division * division), 200, screen_text_step);
         }
-        if (this.globalVariables.showHudMode == 1) {
+        if (this.globalVariables.showHudToggle.getCurrentIndex() == 1) {
             screen_text_step += screen_text_delta + 10;
             g.drawString(text_description, 20, screen_text_step);
             screen_text_step += screen_text_delta;
@@ -295,6 +318,7 @@ public class FrameDraw extends JPanel {
         this.repaint_trigger();
         this.sleep(sleep_milliseconds);
     }
+    
     public void addAndDrawPolygonFX(SUBDIVPOLYGON3_16 divpoly, Color color, long sleep_milliseconds) {
         PolygonFX p_temp0;
         p_temp0 = new PolygonFX(
@@ -307,5 +331,32 @@ public class FrameDraw extends JPanel {
         this.repaint_trigger();
         this.sleep(sleep_milliseconds);
     }
+    
+    public void addAndDrawPolygonFX(RVECTOR4 crv, Color color, long sleep_milliseconds) {
+        PolygonFX p_temp0;
+        p_temp0 = new PolygonFX(
+                new int[]{crv.r0_ptr.sxy.x, crv.r1_ptr.sxy.x, crv.r2_ptr.sxy.x, crv.r3_ptr.sxy.x},
+                new int[]{crv.r0_ptr.sxy.y, crv.r1_ptr.sxy.y, crv.r2_ptr.sxy.y, crv.r3_ptr.sxy.y},
+                new Color[]{color,color,color,color},
+                4
+        );
+        this.addPolygon(p_temp0);
+        this.repaint_trigger();
+        this.sleep(sleep_milliseconds);
+    }
+    
+    public void addAndDrawPolygonFX(SUBDIVPOLYGON4_16 divpoly, Color color, long sleep_milliseconds) {
+        PolygonFX p_temp0;
+        p_temp0 = new PolygonFX(
+                new int[]{divpoly.r0.sxy.x, divpoly.r1.sxy.x, divpoly.r2.sxy.x, divpoly.r3.sxy.x},
+                new int[]{divpoly.r0.sxy.y, divpoly.r1.sxy.y, divpoly.r2.sxy.y, divpoly.r3.sxy.y},
+                new Color[]{color,color,color,color},
+                4
+        );
+        this.addPolygon(p_temp0);
+        this.repaint_trigger();
+        this.sleep(sleep_milliseconds);
+    }
+    
 
 }

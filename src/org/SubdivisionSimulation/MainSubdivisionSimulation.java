@@ -5,11 +5,11 @@
  *
  */
 
-package org.SubdivisionSimulation;
+package org.subdivisionsimulation;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import org.SubdivisionSimulation.Gui.FrameDraw;
+import org.subdivisionsimulation.gui.FrameDraw;
 
 public class MainSubdivisionSimulation {
 
@@ -30,7 +30,9 @@ public class MainSubdivisionSimulation {
         //repeat simulation
         while (true) {
             frameDraw.clearFrame();
-            subdiv.start();
+            subdiv.start_poly();
+            //subdiv.start_poly3();
+            //subdiv.start_poly4();
         }
     }
 }

@@ -5,11 +5,11 @@
  *
  */
 
-package org.SubdivisionSimulation.Controllers;
+package org.subdivisionsimulation.controllers;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import org.SubdivisionSimulation.Gui.FrameDraw;
+import org.subdivisionsimulation.gui.FrameDraw;
 
 public class KeyboardController extends KeyAdapter {
 
@@ -51,7 +51,7 @@ public class KeyboardController extends KeyAdapter {
                 break;
             case KeyEvent.VK_PAGE_UP:
                 this.frameDraw.getGlobalVariables().ndiv_queued++;
-                this.frameDraw.getGlobalVariables().ndiv_queued = this.frameDraw.getGlobalVariables().ndiv_queued > 512 ? 512 : this.frameDraw.getGlobalVariables().ndiv_queued;
+                this.frameDraw.getGlobalVariables().ndiv_queued = this.frameDraw.getGlobalVariables().ndiv_queued > this.frameDraw.getGlobalVariables().ndiv_max ? this.frameDraw.getGlobalVariables().ndiv_max : this.frameDraw.getGlobalVariables().ndiv_queued;
                 break;
              case KeyEvent.VK_PAGE_DOWN:
                 this.frameDraw.getGlobalVariables().ndiv_queued--;
@@ -66,8 +66,10 @@ public class KeyboardController extends KeyAdapter {
                 this.frameDraw.getControlInterface().setDeltaSpeed(-10);//faster
                 break;
             case KeyEvent.VK_H:
-                this.frameDraw.getGlobalVariables().showHudMode++;
-                this.frameDraw.getGlobalVariables().showHudMode = (this.frameDraw.getGlobalVariables().showHudMode > 2 ? 0 : this.frameDraw.getGlobalVariables().showHudMode);
+                this.frameDraw.getGlobalVariables().showHudToggle.toggleClockwise();
+                break;
+            case KeyEvent.VK_S:
+                this.frameDraw.getGlobalVariables().shapeToggle.toggleClockwise();
                 break;
         }//end switch
     }

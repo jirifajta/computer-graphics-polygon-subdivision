@@ -5,11 +5,11 @@
  *
  */
 
-package org.SubdivisionSimulation.Controllers;
+package org.subdivisionsimulation.controllers;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import org.SubdivisionSimulation.Gui.FrameDraw;
+import org.subdivisionsimulation.gui.FrameDraw;
 
 public class WindowController extends ComponentAdapter {
 

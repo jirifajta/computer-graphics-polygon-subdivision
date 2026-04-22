@@ -5,7 +5,7 @@
  *
  */
 
-package org.Subdivision;
+package org.subdivision;
 
 import java.awt.Color;
 

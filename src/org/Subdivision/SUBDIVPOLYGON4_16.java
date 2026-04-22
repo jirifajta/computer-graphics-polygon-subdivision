@@ -7,7 +7,7 @@
 
 package org.subdivision;
 
-public class SUBDIVPOLYGON3_16 {
+public class SUBDIVPOLYGON4_16 {
 
     /**
      * <p> Number of recursive divisions to split polygon into.</p><p>Ndiv number of recursive divisions [0-4]. 0: no subdivision. ndiv: (ndiv*2)*(ndiv*2) polygons.
@@ -25,7 +25,7 @@ public class SUBDIVPOLYGON3_16 {
      * <p> RVECTOR3[] rvs is a list that is holding recursive subdivision at each level.</p><p>Once a certain recursive level i is completed for rvs[i], it will be reused for the next neighbor for next recursion at the same level.
      * </p>
      */
-    public RVECTOR3[] rvs = new RVECTOR3[]{new RVECTOR3(), new RVECTOR3(), new RVECTOR3(), new RVECTOR3()};//16x16 max. By allocating 4 results in fixed memory size rather then variable.
+    public RVECTOR4[] rvs = new RVECTOR4[]{new RVECTOR4(), new RVECTOR4(), new RVECTOR4(), new RVECTOR4()};//16x16 max. By allocating 4 results in fixed memory size rather then variable.
     /**
      * <p> Root vertex0 attributes for this recursive subdivision.
      * </p>
@@ -41,6 +41,11 @@ public class SUBDIVPOLYGON3_16 {
      * </p>
      */
     public RVECTOR r2 = new RVECTOR();// vertex 2 input root vertex of a triangle
+    /**
+     * <p> Root vertex3 attributes for this recursive subdivision.
+     * </p>
+     */
+    public RVECTOR r3 = new RVECTOR();// vertex 2 input root vertex of a triangle
     
     /**
      * <p> Screen space clipping function. True for on, false for off.
@@ -146,7 +151,26 @@ public class SUBDIVPOLYGON3_16 {
         this.r2.uv[1] = v;
         this.r2.c = c;
     }
-
+    
+    /**
+     * <p> Set vertex 3 of this polygon. 
+     * </p>
+     * @param vertex 3D vertex.
+     * @param sxy set screen space x and y component.
+     * @param sz set screen space z component.
+     * @param u set u from uv texture coordinate.
+     * @param v set v from uv texture coordinate.
+     * @param c set color vector.
+     */
+    public void setR3(VECTOR3 vertex, VECTOR2 sxy, int sz, int u, int v, VECTORC c) {
+        this.r3.v = vertex;
+        this.r3.sxy = sxy;
+        this.r3.sz = sz;
+        this.r3.uv[0] = u;
+        this.r3.uv[1] = v;
+        this.r3.c = c;
+    }
+    
     /**
      * <p> Set vertex 0 of this polygon. 
      * </p>
@@ -221,6 +245,31 @@ public class SUBDIVPOLYGON3_16 {
         this.r2.uv[1] = v;
         this.r2.c = new VECTORC(r, g, b, a);
     }
+    
+   /**
+    * <p> Set vertex 3 of this polygon. 
+    * </p>
+    * @param vertex_x 3D vertex component x.
+    * @param vertex_y 3D vertex component y.
+    * @param vertex_z 3D vertex component z.
+    * @param sx set screen space x component.
+    * @param sy set screen space y component.
+    * @param sz set screen space z component.
+    * @param u set u from uv texture coordinate.
+    * @param v set v from uv texture coordinate.
+    * @param r set color red.
+    * @param g set color green.
+    * @param b set color blue.
+    * @param a set color alpha.
+    */
+    public void setR3(int vertex_x, int vertex_y, int vertex_z, int sx, int sy, int sz, int u, int v, int  r, int  g, int  b, int  a) {
+        this.r3.v = new VECTOR3(vertex_x, vertex_y, vertex_z);
+        this.r3.sxy = new VECTOR2(sx, sy);
+        this.r3.sz = sz;
+        this.r3.uv[0] = u;
+        this.r3.uv[1] = v;
+        this.r3.c = new VECTORC(r, g, b, a);
+    }
 
     /**
      * <p> Get vertex values as string.
@@ -228,6 +277,6 @@ public class SUBDIVPOLYGON3_16 {
      * @return String as values store in SUBDIVPOLYGON3_16 object.
      */
     public String getString() {
-        return "RVECTOR3{" + "r0=" + r0.v.x + " " + r0.v.y + " " + r0.v.z + ", r1=" + r1.v.x + " " + r1.v.y + " " + r1.v.z + ", r2=" + r2.v.x + " " + r2.v.y + " " + r2.v.z + '}';
+        return "RVECTOR4{" + "r0=" + r0.v.x + " " + r0.v.y + " " + r0.v.z + ", r1=" + r1.v.x + " " + r1.v.y + " " + r1.v.z + ", r2=" + r2.v.x + " " + r2.v.y + " " + r2.v.z + '}';
     }
 }

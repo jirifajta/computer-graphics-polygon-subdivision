@@ -5,7 +5,7 @@
  *
  */
 
-package org.SubdivisionSimulation;
+package org.subdivisionsimulation.components;
 
 import java.awt.event.MouseEvent;
 
