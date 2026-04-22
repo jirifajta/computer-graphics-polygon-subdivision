@@ -303,11 +303,8 @@ public class SubdivisionDemoMod implements ControlInterface, AddPolygonInterface
             divpoly.rvs[level].r0123 = calculateMidpoints(divpoly.rvs[level].r01, divpoly.rvs[level].r23);// cneter of quad.
 
             calculateMidpoints4_continue(divpoly, level, divpoly.r0, divpoly.rvs[level].r01, divpoly.rvs[level].r0123, divpoly.rvs[level].r30);
-
             calculateMidpoints4_continue(divpoly, level, divpoly.r1, divpoly.rvs[level].r12, divpoly.rvs[level].r0123, divpoly.rvs[level].r01);
-
             calculateMidpoints4_continue(divpoly, level, divpoly.r2, divpoly.rvs[level].r23, divpoly.rvs[level].r0123, divpoly.rvs[level].r12);
-
             calculateMidpoints4_continue(divpoly, level, divpoly.r3, divpoly.rvs[level].r30, divpoly.rvs[level].r0123, divpoly.rvs[level].r23);
 
         } else {
@@ -455,8 +452,8 @@ public class SubdivisionDemoMod implements ControlInterface, AddPolygonInterface
         //update from mouse
         divpoly.clipx = globalVariables.clipping_boundry.x;
         divpoly.clipy = globalVariables.clipping_boundry.y;
-        divpoly.cliph = globalVariables.clipping_boundry.width;
-        divpoly.clipv = globalVariables.clipping_boundry.height;
+        divpoly.clipw = globalVariables.clipping_boundry.width;
+        divpoly.cliph = globalVariables.clipping_boundry.height;
 
         minX = Math.min(v0.x, Math.min(v1.x, v2.x));
         maxX = Math.max(v0.x, Math.max(v1.x, v2.x));
@@ -465,10 +462,10 @@ public class SubdivisionDemoMod implements ControlInterface, AddPolygonInterface
         maxY = Math.max(v0.y, Math.max(v1.y, v2.y));
 
         // outside screen?
-        if (maxX < divpoly.clipx || minX > divpoly.clipx + divpoly.cliph) {
+        if (maxX < divpoly.clipx || minX > divpoly.clipx + divpoly.clipw) {
             return false;
         }
-        if (maxY < divpoly.clipy || minY > divpoly.clipy + divpoly.clipv) {
+        if (maxY < divpoly.clipy || minY > divpoly.clipy + divpoly.cliph) {
             return false;
         }
         return true; // potentially visible
@@ -483,8 +480,8 @@ public class SubdivisionDemoMod implements ControlInterface, AddPolygonInterface
         //update from mouse
         divpoly.clipx = globalVariables.clipping_boundry.x;
         divpoly.clipy = globalVariables.clipping_boundry.y;
-        divpoly.cliph = globalVariables.clipping_boundry.width;
-        divpoly.clipv = globalVariables.clipping_boundry.height;
+        divpoly.clipw = globalVariables.clipping_boundry.width;
+        divpoly.cliph = globalVariables.clipping_boundry.height;
 
         minX = Math.min(v0.x, Math.min(v1.x, Math.min(v2.x, v3.x)));
         maxX = Math.max(v0.x, Math.max(v1.x, Math.max(v2.x, v3.x)));
@@ -493,10 +490,10 @@ public class SubdivisionDemoMod implements ControlInterface, AddPolygonInterface
         maxY = Math.max(v0.y, Math.max(v1.y, Math.max(v2.y, v3.y)));
 
         // outside screen?
-        if (maxX < divpoly.clipx || minX > divpoly.clipx + divpoly.cliph) {
+        if (maxX < divpoly.clipx || minX > divpoly.clipx + divpoly.clipw) {
             return false;
         }
-        if (maxY < divpoly.clipy || minY > divpoly.clipy + divpoly.clipv) {
+        if (maxY < divpoly.clipy || minY > divpoly.clipy + divpoly.cliph) {
             return false;
         }
         return true; // potentially visible

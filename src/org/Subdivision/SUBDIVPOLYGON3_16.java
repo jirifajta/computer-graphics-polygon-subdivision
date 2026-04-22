@@ -16,10 +16,10 @@ public class SUBDIVPOLYGON3_16 {
     public int ndiv;
     
     /**
-     * <p> Set screen space clipping rectangle(x, y, w, h). clipx, clipy - cliph, clipv. 
+     * <p> Set screen space clipping rectangle(x, y, w, h). clipx, clipy - clipw, cliph. 
      * </p>
      */
-    public int clipx, clipy, cliph, clipv;
+    public int clipx, clipy, clipw, cliph;
     
     /**
      * <p> RVECTOR3[] rvs is a list that is holding recursive subdivision at each level.</p><p>Once a certain recursive level i is completed for rvs[i], it will be reused for the next neighbor for next recursion at the same level.
@@ -76,18 +76,18 @@ public class SUBDIVPOLYGON3_16 {
     }
 
     /**
-     * <p> Set screen space clipping coordinates. If all projected vertecies on screenspace of a polygon are outside this rectangle then this polygon will not be produced. 
+     * <p> Set screen space clipping coordinates. If all projected vertecies on screen space of a polygon are outside this rectangle then this polygon will not be produced. 
      * </p>
      * @param clipx left bound of the screen.
      * @param clipy top bound of the screen.
-     * @param cliph width of the screen.
-     * @param clipv height of the screen.
+     * @param clipw width of the screen.
+     * @param cliph height of the screen.
      */
-    public void setClip(int clipx, int clipy, int cliph, int clipv) {
+    public void setClip(int clipx, int clipy, int clipw, int cliph) {
         this.clipx = clipx;
         this.clipy = clipy;
+        this.clipw = cliph;
         this.cliph = cliph;
-        this.clipv = clipv;
     }
 
     /**

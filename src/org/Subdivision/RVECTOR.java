@@ -6,10 +6,12 @@
  */
 
 package org.subdivision;
-
-// recursive vertices.
-// recursive element that holds data of any vertex attributes.
+/*
+    recursive vertices.
+    recursive element that holds data of any vertex attributes.
+*/
 public class RVECTOR {
+
     /**
      * <p>Vertex.</p>
      */

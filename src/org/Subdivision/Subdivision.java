@@ -34,8 +34,8 @@ public class Subdivision{
         divpoly.ndiv = 4;
         divpoly.clipx=0;
         divpoly.clipy=0;
-        divpoly.cliph = 1920;
-        divpoly.clipv = 1080;
+        divpoly.clipw = 1920;
+        divpoly.cliph = 1080;
 
         // start triangle as input. 
         divpoly.r0.v.x = -100;
@@ -83,8 +83,8 @@ public class Subdivision{
         divpoly.ndiv = 4;
         divpoly.clipx=0;
         divpoly.clipy=0;
-        divpoly.cliph = 1920;
-        divpoly.clipv = 1080;
+        divpoly.clipw = 1920;
+        divpoly.cliph = 1080;
 
         // start triangle as input. 
         divpoly.r0.v.x = -100;
@@ -226,11 +226,8 @@ public class Subdivision{
 
             
             calculateMidpoints4_continue(divpoly, level, divpoly.r0, divpoly.rvs[level].r01, divpoly.rvs[level].r0123, divpoly.rvs[level].r30);
-
             calculateMidpoints4_continue(divpoly, level, divpoly.r1, divpoly.rvs[level].r12, divpoly.rvs[level].r0123, divpoly.rvs[level].r01);
-
             calculateMidpoints4_continue(divpoly, level, divpoly.r2, divpoly.rvs[level].r23, divpoly.rvs[level].r0123, divpoly.rvs[level].r12);
-
             calculateMidpoints4_continue(divpoly, level, divpoly.r3, divpoly.rvs[level].r30, divpoly.rvs[level].r0123, divpoly.rvs[level].r23);
 
         } else {
@@ -396,10 +393,10 @@ public class Subdivision{
         maxY = Math.max(v0.y, Math.max(v1.y, v2.y));
 
         // outside screen?
-        if (maxX < divpoly.clipx || minX > divpoly.clipx + divpoly.cliph) {
+        if (maxX < divpoly.clipx || minX > divpoly.clipx + divpoly.clipw) {
             return false;
         }
-        if (maxY < divpoly.clipy || minY > divpoly.clipy + divpoly.clipv) {
+        if (maxY < divpoly.clipy || minY > divpoly.clipy + divpoly.cliph) {
             return false;
         }
         return true; // potentially visible
@@ -418,10 +415,10 @@ public class Subdivision{
         maxY = Math.max(v0.y, Math.max(v1.y, Math.max(v2.y, v3.y)));
 
         // outside screen?
-        if (maxX < divpoly.clipx || minX > divpoly.clipx + divpoly.cliph) {
+        if (maxX < divpoly.clipx || minX > divpoly.clipx + divpoly.clipw) {
             return false;
         }
-        if (maxY < divpoly.clipy || minY > divpoly.clipy + divpoly.clipv) {
+        if (maxY < divpoly.clipy || minY > divpoly.clipy + divpoly.cliph) {
             return false;
         }
         return true; // potentially visible

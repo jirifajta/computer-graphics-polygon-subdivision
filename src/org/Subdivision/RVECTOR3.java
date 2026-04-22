@@ -9,7 +9,7 @@ package org.subdivision;
 
 public class RVECTOR3 {
     //Midpoints of root triangles at this level.
-    //These 6 vertex attributes holds 4 triangles at the same level of subdivisionS.
+    //These 6 vertex attributes holds 4 triangles at the same level of subdivision.
     /**
      * <p>r01 holds a vertex midpoint of r0_ptr and r1_ptr attributes at recursion level i.</p>
      */
