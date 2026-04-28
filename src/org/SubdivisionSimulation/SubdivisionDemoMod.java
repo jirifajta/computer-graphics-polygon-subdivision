@@ -284,7 +284,7 @@ public class SubdivisionDemoMod implements ControlInterface, AddPolygonInterface
         }
         this.globalVariables.ndiv_max = divpoly.rvs.length;
         
-        //ORIGINAL TRIANGLE:
+        //ORIGINAL QUAD:
         if(this.frameDraw != null){
             // for live simulation 
             this.frameDraw.addAndDrawPolygonFX(divpoly, new Color(0,128,0), globalVariables.pauze_between_frames);
@@ -378,6 +378,11 @@ public class SubdivisionDemoMod implements ControlInterface, AddPolygonInterface
             divpoly.rvs[level_plus_one].r0123 = calculateMidpoints(divpoly.rvs[level_plus_one].r01, divpoly.rvs[level_plus_one].r23);//center.
             divpoly.rvs[level_plus_one].level = level;// level of the midpoints.
 
+            if(this.frameDraw != null){
+                // for live simulation 
+                this.frameDraw.addAndDrawPolygonFX(divpoly.rvs[level], Color.GRAY, globalVariables.pauze_between_frames);
+            }
+            
             //// next subdevision ////
             calculateMidpoints4_continue(divpoly, level_plus_one, divpoly.rvs[level].r0_ptr, divpoly.rvs[level_plus_one].r01, divpoly.rvs[level_plus_one].r0123, divpoly.rvs[level_plus_one].r30);
 
